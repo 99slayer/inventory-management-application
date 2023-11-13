@@ -2,7 +2,12 @@ const express = require('express');
 const router = express.Router();
 
 // Require controller modules.
-// CONTROLLERS
+const category_controller = require('../controllers/categoryController');
+const index_controller = require('../controllers/indexController');
+const item_controller = require('../controllers/itemController');
+
+// /inventory just set to homepage for right now.
+router.get('/', index_controller.index);
 
 // CATEGORY ROUTES
 // GET/POST request for creating category.
@@ -41,3 +46,5 @@ router.get('/item/:id', item_controller.item_detail);
 
 // GET request for an item list.
 router.get('/items', item_controller.item_list);
+
+module.exports = router;
