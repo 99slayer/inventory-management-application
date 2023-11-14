@@ -4,4 +4,30 @@ html
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
-    block content
+    div(id='header')
+      div(id='logo')
+        a(href='/') SITE LOGO
+      div(id='categories')
+        a(
+          id='view-categories-btn'
+          class='btn'
+          href='/inventory/categories'
+          ) Categories
+        a(
+          id='add-categories-btn'
+          class='add-btn not-first'
+          href='/inventory/category/create'
+          ) +
+      div(id='items')
+        a(
+          id='view-items-btn'
+          class='btn'
+          href='/inventory/items'
+          ) items
+        a(
+          id='add-items-btn'
+          class='add-btn not-first'
+          href='/inventory/item/create'
+          ) +
+    div(id='main')
+      block content

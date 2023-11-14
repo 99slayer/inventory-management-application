@@ -1,0 +1,12 @@
+extends layout
+
+block content
+  h1= title
+
+  h2= category.name 
+  p= category.description 
+  ul(class='list') 
+    each item in category_items
+      li(class='list-item')
+        div(class='list-btn')
+          a(href=item.url)= item.name
