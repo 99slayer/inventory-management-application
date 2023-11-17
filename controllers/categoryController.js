@@ -1,6 +1,7 @@
 const Category = require('../models/category');
 const Item = require('../models/item');
 const asyncHandler = require('express-async-handler');
+const { body, validationResult } = require('express-validator');
 
 // Display list of all categories.
 exports.category_list = asyncHandler(async (req, res, next) => {
@@ -43,12 +44,51 @@ exports.category_detail = asyncHandler(async (req, res, next) => {
 });
 
 exports.category_create_get = asyncHandler(async (req, res, next) => {
-  res.send('placeholder');
+  res.render('category_form', { title: 'Create Category' });
 });
 
-exports.category_create_post = asyncHandler(async (req, res, next) => {
-  res.send('placeholder');
-});
+exports.category_create_post = [
+  // Validate and sanitize the name field.
+  body('name')
+    .trim()
+    .isLength({ min: 3, max: 50 })
+    .withMessage('Category name must be between 3 and 50 characters.')
+    .escape(),
+  body('description')
+    .trim()
+    .isLength({ min: 0, max: 400 })
+    .withMessage('Category description cannot exceed 400 characters.')
+    .escape(),
+
+  // Process request after validation and sanitization.
+  asyncHandler(async (req, res, next) => {
+    const errors = validationResult(req);
+
+    const category = new Category({
+      name: req.body.name,
+      description: req.body.description
+    });
+
+    if (!errors.isEmpty()) {
+      // Invalid data.
+      res.render('category_form', {
+        title: 'Create Category',
+        category: category,
+        errors: errors.array(),
+      });
+      return;
+    } else {
+      // Valid data.
+      const categoryExists = await Category.findOne({ name: req.body.name }).exec();
+      if (categoryExists) {
+        res.redirect(categoryExists.url);
+      } else {
+        await category.save();
+        res.redirect(category.url);
+      }
+    }
+  }),
+];
 
 exports.category_delete_get = asyncHandler(async (req, res, next) => {
   res.send('placeholder');

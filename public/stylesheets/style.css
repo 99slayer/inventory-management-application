@@ -5,6 +5,7 @@
 }
 
 body {
+  min-width: 400px;
   min-height: 100vh;
   padding: 50px;
   display: flex;
@@ -87,4 +88,39 @@ li {
 
 .list-btn a {
   flex: 1;
+}
+
+#category-form, #item-form {
+  width: 50%;
+  /* min-width: 400px; */
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+#category-selection {
+  padding: 4px;
+  border: 1px solid black;
+}
+
+.category-radio-input {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.size-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.size-inputs input {
+  width: 100px;
 }

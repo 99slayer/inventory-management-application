@@ -1,0 +1,40 @@
+extends layout 
+
+block content 
+  h1 #{title}
+
+  form(method='POST' action='' id='item-form')
+    div(class='form-group')
+      label(for='name') Name:
+      input(class='form-control' type='' placeholder='Name' name='name' value=(undefined === item ? '' : item.name))
+    div(class='form-group')
+      ul(id='category-selection')
+        each category in categories 
+          li(class='category-radio-input')
+            label(for='category') #{category.name}
+            input(class='form-control' type='radio' name='category' value=category.name required='true' checked=((undefined === item || item.category.name !== category.name) ? false : true))
+    div(class='form-group')
+      label(for='price') Price:
+      input(class='form-control' type='number' placeholder='Price' name='price' step='any' required='true' value=(undefined === item ? '' : item.price.toString()))
+    div(class='form-group')
+      div(class='size-inputs') Sizes:
+        label(for='small') S:
+        input(class='form-control' type='number' placeholder='Small' name='small' value=(undefined === item ? 0 : item.sizes_in_stock.s))
+        label(for='medium') M:
+        input(class='form-control' type='number' placeholder='Medium' name='medium' value=(undefined === item ? 0 : item.sizes_in_stock.m))
+        label(for='large') L:
+        input(class='form-control' type='number' placeholder='Large' name='large' value=(undefined === item ? 0 : item.sizes_in_stock.l))
+        label(for='extraLarge') XL:
+        input(class='form-control' type='number' placeholder='Extra Large' name='extraLarge' value=(undefined === item ? 0 : item.sizes_in_stock.xl))
+    div(class='form-group')
+      label(for='description') Description:
+      textarea(class='form-control' placeholder='Description' name='description' value=(undefined === item ? '' : item.description))
+    button(class='' type='submit') Submit
+  
+  //- displaying errors at their corresponding elements would be best
+  //- or display the input along side the error that's referring to it.
+
+  if errors 
+    ul
+      for error in errors 
+        li!= error.msg
