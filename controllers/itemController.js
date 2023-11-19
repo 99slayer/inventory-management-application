@@ -150,7 +150,22 @@ exports.item_delete_post = asyncHandler(async (req, res, next) => {
 });
 
 exports.item_update_get = asyncHandler(async (req, res, next) => {
-  res.send('placeholder');
+  const [item, categories] = await Promise.all([
+    Item.findById(req.params.id).populate('category').exec(),
+    Category.find({}, 'name').exec(),
+  ]);
+
+  if (item === null) {
+    const err = new Error('Item not found.');
+    err.status = 404;
+    return next(err);
+  }
+
+  res.render('item_form', {
+    title: 'Update Item',
+    item: item,
+    categories: categories,
+  });
 });
 
 exports.item_update_post = asyncHandler(async (req, res, next) => {

@@ -28,6 +28,7 @@ block content
         input(class='form-control' type='number' placeholder='Extra Large' name='extraLarge' value=(undefined === item ? 0 : item.sizes_in_stock.xl))
     div(class='form-group')
       label(for='description') Description:
+      //- [BUG] The textareas value is not being properly rendered when there are errors.
       textarea(class='form-control' placeholder='Description' name='description' value=(undefined === item ? '' : item.description))
     button(class='' type='submit') Submit
   

@@ -114,7 +114,7 @@ exports.category_delete_post = asyncHandler(async (req, res, next) => {
   ]);
 
   if (items.length > 0) {
-    // 
+    // Items are still linked to this category.
     res.render('category_delete', {
       title: 'Delete Category',
       category: category,
@@ -122,13 +122,25 @@ exports.category_delete_post = asyncHandler(async (req, res, next) => {
     });
     return;
   } else {
+    // No items are linked to this category.
     await Category.findByIdAndDelete(req.body.categoryid);
     res.redirect('/inventory/categories');
   }
 });
 
 exports.category_update_get = asyncHandler(async (req, res, next) => {
-  res.send('placeholder');
+  const category = await Category.findById(req.params.id).exec();
+
+  if (category === null) {
+    const err = new Error('Category not found.');
+    err.status = 404;
+    return next(err);
+  }
+
+  res.render('category_form', {
+    title: 'Update Category',
+    category: category,
+  })
 });
 
 exports.category_update_post = asyncHandler(async (req, res, next) => {
