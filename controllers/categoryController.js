@@ -143,6 +143,38 @@ exports.category_update_get = asyncHandler(async (req, res, next) => {
   })
 });
 
-exports.category_update_post = asyncHandler(async (req, res, next) => {
-  res.send('placeholder');
-});
+exports.category_update_post = [
+  // Validate and sanitize the name field.
+  body('name')
+    .trim()
+    .isLength({ min: 3, max: 50 })
+    .withMessage('Category name must be between 3 and 50 characters.')
+    .escape(),
+  body('description')
+    .trim()
+    .isLength({ min: 0, max: 400 })
+    .withMessage('Category description cannot exceed 400 characters.')
+    .escape(),
+
+  asyncHandler(async (req, res, next) => {
+    const errors = validationResult(req);
+    const category = new Category({
+      name: req.body.name,
+      description: req.body.description,
+      _id: req.params.id,
+    });
+
+    if (!errors.isEmpty()) {
+      // Invalid data.
+      res.render('category_form', {
+        title: 'Update Category',
+        category: category,
+        errors: errors,
+      });
+    } else {
+      // Valid data.
+      const updatedCategory = await Category.findByIdAndUpdate(req.params.id, category, {});
+      res.redirect(updatedCategory.url);
+    }
+  }),
+];

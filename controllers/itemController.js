@@ -168,6 +168,85 @@ exports.item_update_get = asyncHandler(async (req, res, next) => {
   });
 });
 
-exports.item_update_post = asyncHandler(async (req, res, next) => {
-  res.send('placeholder');
-});
+exports.item_update_post = [
+  // Validate and sanitize.
+  body('name')
+    .trim()
+    .isLength({ min: 2, max: 50 })
+    .withMessage('Item name must be between 2 and 50 characters.')
+    .escape(),
+  // Should there be more validation for the category value?
+  body('category')
+    .escape(),
+  body('price')
+    .trim()
+    .isNumeric()
+    .custom(isPositive)
+    .withMessage('Price must be a positive value.')
+    .escape(),
+  body('small')
+    .trim()
+    .isNumeric()
+    .custom(isPositive)
+    .withMessage('Small: Cannot have negative product in stock.')
+    .escape(),
+  body('medium')
+    .trim()
+    .isNumeric()
+    .custom(isPositive)
+    .withMessage('Medium: Cannot have negative product in stock.')
+    .escape(),
+  body('large')
+    .trim()
+    .isNumeric()
+    .custom(isPositive)
+    .withMessage('Large: Cannot have negative product in stock.')
+    .escape(),
+  body('extraLarge')
+    .trim()
+    .isNumeric()
+    .custom(isPositive)
+    .withMessage('ExtraLarge: Cannot have negative product in stock.')
+    .escape(),
+  body('description')
+    .trim()
+    .isLength({ min: 0, max: 400 })
+    .withMessage('Item description cannot exceed 400 characters.')
+    .escape(),
+
+  asyncHandler(async (req, res, next) => {
+    const errors = validationResult(req);
+    const price = Number.parseFloat(req.body.price).toFixed(2);
+    const category = await Category.findOne({ name: req.body.category }).exec();
+    const item = new Item({
+      name: req.body.name,
+      description: req.body.description,
+      category: category,
+      price: price,
+      sizes_in_stock: {
+        n: 0,
+        s: req.body.small,
+        m: req.body.medium,
+        l: req.body.large,
+        xl: req.body.extraLarge,
+      },
+      _id: req.params.id,
+    });
+
+    if (!errors.isEmpty()) {
+      // Invalid data.
+      const categories = await Category.find().exec();
+
+      res.render('item_form', {
+        title: 'Update Item',
+        item: item,
+        categories: categories,
+        errors: errors,
+      })
+    } else {
+      // Valid data.
+      const updatedItem = await Item.findByIdAndUpdate(req.params.id, item, {});
+      res.redirect(updatedItem.url);
+    }
+  }),
+];
