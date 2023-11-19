@@ -131,11 +131,22 @@ exports.item_create_post = [
 ];
 
 exports.item_delete_get = asyncHandler(async (req, res, next) => {
-  res.send('placeholder');
+  const item = await Item.findById(req.params.id).exec();
+
+  if (item === null) {
+    // No results.
+    res.redirect('/inventory/items');
+  }
+
+  res.render('item_delete', {
+    title: 'Delete Item',
+    item: item,
+  });
 });
 
 exports.item_delete_post = asyncHandler(async (req, res, next) => {
-  res.send('placeholder');
+  await Item.findByIdAndDelete(req.body.itemid);
+  res.redirect('/inventory/items');
 });
 
 exports.item_update_get = asyncHandler(async (req, res, next) => {

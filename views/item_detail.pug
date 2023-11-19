@@ -8,3 +8,6 @@ block content
       a(href=item.category.url)= item.category.name
   p= 'Sizes in stock:' + ' S: ' + item.sizes_in_stock.s + ' M: ' + item.sizes_in_stock.m + ' L: ' + item.sizes_in_stock.l + ' XL: ' + item.sizes_in_stock.xl
   p= item.description
+
+  a(href=item.url + '/delete') Delete Item
+  a(href=item.url + '/update') Update Item
