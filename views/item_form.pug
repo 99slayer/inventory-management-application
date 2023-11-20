@@ -6,7 +6,7 @@ block content
   form(method='POST' action='' id='item-form')
     div(class='form-group')
       label(for='name') Name:
-      input(class='form-control' type='' placeholder='Name' name='name' value=(undefined === item ? '' : item.name))
+      input(class='form-control' type='text' placeholder='Name' name='name' value=(undefined === item ? '' : item.name))
     div(class='form-group')
       ul(id='category-selection')
         each category in categories 
@@ -29,8 +29,8 @@ block content
     div(class='form-group')
       label(for='description') Description:
       //- [BUG] The textareas value is not being properly rendered when there are errors.
-      textarea(class='form-control' placeholder='Description' name='description' value=(undefined === item ? '' : item.description))
-    button(class='' type='submit') Submit
+      textarea(class='form-control' form='item-form' cols='60' rows='10' placeholder='Description' name='description' value=(undefined === item ? '' : item.description))
+    button(type='submit' style='width: 60px; cursor: pointer;') Submit
   
   //- displaying errors at their corresponding elements would be best
   //- or display the input along side the error that's referring to it.

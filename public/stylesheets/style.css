@@ -14,7 +14,21 @@ body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
+label {
+  font-weight: 700;
+}
+
+input[type='text'] {
+  min-width: 140px;
+  max-width: 40%;
+}
+
+input[type='number'] {
+  width: 100px;
+}
+
 a {
+  flex: 1;
   color: black;
   text-decoration: none;
 }
@@ -26,8 +40,15 @@ li {
 #header {
   padding: 10px;
   display: flex;
+  align-items: center;
   gap: 5px;
   border: 1px solid black;
+}
+
+#logo {
+  padding: 0px 20px 0px 20px;
+  font-size: 16px;
+  font-weight: 900;
 }
 
 #categories,#items {
@@ -36,20 +57,22 @@ li {
 
 .btn {
   padding: 2px;
+  display: flex;
   border: 1px solid black;
 }
 
-.btn:hover, .list-btn:hover {
-  border-width: 1px 2px 2px 1px !important;
-}
-
-.add-btn {
+.btn.add {
   width: 24px;
   height: 24px;
-  padding: 2px;
-  border: 1px solid black;
-  border-width: 1px 1px 1px 0px;
   text-align: center;
+}
+
+.btn.not-first {
+  border-width: 1px 1px 1px 0px;
+}
+
+.btn:hover {
+  border-width: 1px 2px 2px 1px !important;
 }
 
 .not-first:hover {
@@ -71,28 +94,35 @@ li {
 }
 
 .list-item {
-  display: flex;
   width: 300px;
+  display: flex;
 }
 
-.list-btn {
-  flex: 1;
-  padding: 2px;
+.list-header {
+  width: 300px;
   display: flex;
+}
+
+.list-item div {
+  flex: 1;
+}
+
+.list-header div {
+  padding: 2px;
+  flex: 1;
+  font-weight: 700;
+  text-align: center;
   border: 1px solid black;
 }
 
-.list-btn.not-first {
-  border-width: 1px 1px 1px 0px;
-}
-
-.list-btn a {
-  flex: 1;
+.crud-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 #category-form, #item-form {
-  width: 50%;
-  /* min-width: 400px; */
+  /* width: 50%; */
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -119,8 +149,5 @@ li {
   display: flex;
   flex-direction: column;
   gap: 2px;
-}
-
-.size-inputs input {
-  width: 100px;
+  font-weight: 700;
 }

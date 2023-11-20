@@ -3,10 +3,11 @@ extends layout
 block content 
   h1  #{title}
 
-  p= 'Delete' + item.name + '?'
+  p= 'Delete ' + item.name + '?'
 
   form(method='POST' action='')
     div(class='form-group')
       input(class='form-control' type='hidden' name='itemid' required='true' value=item._id)
 
-    button(type='submit') Delete
+    br
+    button(type='submit' style='padding: 0px 2px 0px 2px; cursor: pointer;') Delete

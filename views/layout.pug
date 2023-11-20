@@ -6,28 +6,18 @@ html
   body
     div(id='header')
       div(id='logo')
-        a(href='/') SITE LOGO
+        a(href='/') MENS CLOTHING WAREHOUSE
       div(id='categories')
-        a(
-          id='view-categories-btn'
-          class='btn'
-          href='/inventory/categories'
-          ) Categories
-        a(
-          id='add-categories-btn'
-          class='add-btn not-first'
-          href='/inventory/category/create'
-          ) +
+        div(class='btn')
+          a(href='/inventory/categories') Categories
+        div(class='btn add not-first')
+          a(href='/inventory/category/create') +
       div(id='items')
-        a(
-          id='view-items-btn'
-          class='btn'
-          href='/inventory/items'
-          ) items
-        a(
-          id='add-items-btn'
-          class='add-btn not-first'
-          href='/inventory/item/create'
-          ) +
+        div(class='btn')
+          a(href='/inventory/items') items
+        div(class='btn add not-first')
+          a(href='/inventory/item/create') +
     div(id='main')
       block content
+      br
+      br

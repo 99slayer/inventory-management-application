@@ -2,12 +2,23 @@ extends layout
 
 block content
   h1= title
-  h2= item.name + item.price
-  div(class='list-item')
-    div(class='list-btn')
+  div(style='display: flex; gap: 10px;')
+    h2= item.name
+    div(class='btn')
       a(href=item.category.url)= item.category.name
-  p= 'Sizes in stock:' + ' S: ' + item.sizes_in_stock.s + ' M: ' + item.sizes_in_stock.m + ' L: ' + item.sizes_in_stock.l + ' XL: ' + item.sizes_in_stock.xl
+      
+  br
+  p #[strong Price:] #{item.price}
+  strong Sizes in stock:
+  p #[strong S:] #{item.sizes_in_stock.s}
+  p #[strong M:] #{item.sizes_in_stock.m}
+  p #[strong L:] #{item.sizes_in_stock.l}
+  p #[strong XL:] #{item.sizes_in_stock.xl}
+  br
   p= item.description
-
-  a(href=item.url + '/delete') Delete Item
-  a(href=item.url + '/update') Update Item
+  br
+  div(class='crud-btns')
+    button(style='width: 80px;')
+      a(href=item.url + '/delete') Delete Item
+    button(style='width: 80px;')
+      a(href=item.url + '/update') Update Item

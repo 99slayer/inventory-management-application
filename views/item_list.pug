@@ -1,12 +1,15 @@
 extends layout
 
 block content
-  h1= title
+  h3= title
   //- alphabetically sort items within each category
   ul(class='list') 
+    li(class='list-header')
+      div ITEMS 
+      div(style='border-width: 1px 1px 1px 0px;') CATEGORIES
     each item in item_list
       li(class='list-item')
-        div(class='list-btn')
+        div(class='btn')
           a(href=item.url)= item.name
-        div(class='list-btn not-first')
-          a(href=item.category.url)= ' [' + item.category.name + ']'
+        div(class='btn not-first')
+          a(href=item.category.url)= item.category.name
