@@ -3,7 +3,7 @@ extends layout
 block content 
   h1 #{title}
 
-  form(method='POST' action='' id='item-form')
+  form(method='POST' action='' id='item-form' enctype='multipart/form-data')
     div(class='form-group')
       label(for='name') Name:
       input(class='form-control' type='text' placeholder='Name' name='name' value=(undefined === item ? '' : item.name))
@@ -30,6 +30,11 @@ block content
       label(for='description') Description:
       //- [BUG] The textareas value is not being properly rendered when there are errors.
       textarea(class='form-control' form='item-form' cols='60' rows='10' placeholder='Description' name='description' value=(undefined === item ? '' : item.description))
+    div(class='form-group')
+      label(for='file-upload') Image: 
+      input(class='form-control' type='file' name='file-upload' value='')
+
+    br
     button(type='submit' style='width: 60px; cursor: pointer;') Submit
   
   //- displaying errors at their corresponding elements would be best

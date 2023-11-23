@@ -1,12 +1,16 @@
 extends layout
 
 block content
-  h1= title
+  h2= title
   div(style='display: flex; gap: 10px;')
-    h2= item.name
+    h3= item.name
     div(class='btn')
       a(href=item.category.url)= item.category.name
-      
+
+  if  !(item.convertedBuffer === null)
+    br
+    img(class='display-image' src=item.convertedBuffer)
+
   br
   p #[strong Price:] #{item.price}
   strong Sizes in stock:

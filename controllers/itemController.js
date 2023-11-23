@@ -2,6 +2,14 @@ const Item = require('../models/item');
 const Category = require('../models/category');
 const asyncHandler = require('express-async-handler');
 const { body, validationResult } = require('express-validator');
+const multer = require('multer');
+
+const storage = multer.memoryStorage();
+const MB = 1048576;
+const upload = multer({
+  storage: storage,
+  limits: { fileSize: MB * 6 }
+});
 
 // Display list of all items.
 exports.item_list = asyncHandler(async (req, res, next) => {
@@ -28,8 +36,13 @@ exports.item_detail = asyncHandler(async (req, res, next) => {
 });
 
 exports.item_create_get = asyncHandler(async (req, res, next) => {
-  // cannot create item without a category !!!
   const categories = await Category.find().exec();
+
+  if (categories.length === 0) {
+    const err = new Error('Items cannot be created if there are no existing categories.');
+    err.status = 404;
+    return next(err);
+  }
 
   res.render('item_form', { title: 'Create Item', categories: categories });
 });
@@ -43,13 +56,40 @@ const isPositive = (n) => {
 };
 
 exports.item_create_post = [
+  upload.single('file-upload'),
+
   // Validate and sanitize.
   body('name')
     .trim()
     .isLength({ min: 2, max: 50 })
     .withMessage('Item name must be between 2 and 50 characters.')
+    // File validation work around.
+    .custom((value, { req }) => {
+      if (req.file === undefined) {
+        return true
+      }
+
+      const types = ['image/png', 'image/jpeg', 'image/jpg'];
+      const extensions = ['png', 'jpeg', 'jpg'];
+      const getExtension = (fileName) => {
+        return fileName.slice(((fileName.lastIndexOf('.') - 1) >>> 0) + 2)
+      };
+
+      if (!(extensions.includes(getExtension(req.file.originalname)))) {
+        throw Error(`file ${req.file.originalname} has an invalid file extension.`);
+      }
+
+      if (!(types.includes(req.file.mimetype))) {
+        throw Error(`file ${req.file.originalname} has an invalid mimetype.`);
+      }
+
+      if (req.file.size > MB * 2) {
+        throw Error(`file ${req.file.originalname} is too big.`);
+      }
+
+      return true;
+    })
     .escape(),
-  // Should there be more validation for the category value?
   body('category')
     .escape(),
   body('price')
@@ -103,7 +143,8 @@ exports.item_create_post = [
         m: req.body.medium,
         l: req.body.large,
         xl: req.body.extraLarge,
-      }
+      },
+      image_file: (undefined === req.file ? null : req.file.buffer),
     });
 
     if (!errors.isEmpty()) {
@@ -175,7 +216,6 @@ exports.item_update_post = [
     .isLength({ min: 2, max: 50 })
     .withMessage('Item name must be between 2 and 50 characters.')
     .escape(),
-  // Should there be more validation for the category value?
   body('category')
     .escape(),
   body('price')

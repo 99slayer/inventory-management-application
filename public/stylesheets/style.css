@@ -87,6 +87,11 @@ li {
   border: 1px solid black;
 }
 
+.display-image {
+  max-width: 400px;
+  height: auto;
+}
+
 .list {
   display: flex;
   flex-direction: column;
