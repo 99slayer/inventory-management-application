@@ -7,9 +7,17 @@ require('dotenv').config()
 
 var indexRouter = require('./routes/index');
 var inventoryRouter = require('./routes/inventory');
-// var usersRouter = require('./routes/users');
+const compression = require('compression');
+const helmet = require('helmet');
 
 var app = express();
+
+const RateLimit = require('express-rate-limit');
+const limiter = RateLimit({
+  windowMs: 1 * 60 * 1000, // 1 minute
+  max: 40,
+});
+app.use(limiter);
 
 // Set up mongoose connection
 const mongoose = require("mongoose");
@@ -29,6 +37,8 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(helmet());
+app.use(compression()); // Compress all routes.
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
