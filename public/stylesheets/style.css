@@ -87,6 +87,14 @@ li {
   border: 1px solid black;
 }
 
+.delete-image-cont {
+  align-self: flex-start;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
 .display-image {
   max-width: 400px;
   height: auto;
@@ -127,7 +135,6 @@ li {
 }
 
 #category-form, #item-form {
-  /* width: 50%; */
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -136,6 +143,7 @@ li {
 .form-group {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   gap: 4px;
 }
 

@@ -210,11 +210,42 @@ exports.item_update_get = asyncHandler(async (req, res, next) => {
 });
 
 exports.item_update_post = [
+  upload.single('file-upload'),
+
   // Validate and sanitize.
   body('name')
     .trim()
     .isLength({ min: 2, max: 50 })
     .withMessage('Item name must be between 2 and 50 characters.')
+    // File validation work around.
+    .custom((value, { req }) => {
+      if (req.file === undefined) {
+        return true
+      }
+
+      const types = ['image/png', 'image/jpeg', 'image/jpg'];
+      const extensions = ['png', 'jpeg', 'jpg'];
+      const getExtension = (fileName) => {
+        return fileName.slice(((fileName.lastIndexOf('.') - 1) >>> 0) + 2)
+      };
+
+      // Validates file extension.
+      if (!(extensions.includes(getExtension(req.file.originalname)))) {
+        throw Error(`file ${req.file.originalname} has an invalid file extension.`);
+      }
+
+      // Validates file mimetype.
+      if (!(types.includes(req.file.mimetype))) {
+        throw Error(`file ${req.file.originalname} has an invalid mimetype.`);
+      }
+
+      // Validates file size.
+      if (req.file.size > MB * 2) {
+        throw Error(`file ${req.file.originalname} is too big.`);
+      }
+
+      return true;
+    })
     .escape(),
   body('category')
     .escape(),
@@ -258,6 +289,8 @@ exports.item_update_post = [
     const errors = validationResult(req);
     const price = Number.parseFloat(req.body.price).toFixed(2);
     const category = await Category.findOne({ name: req.body.category }).exec();
+    const oldImgBuffer = await Item.findById(req.params.id, 'image_file').exec();
+
     const item = new Item({
       name: req.body.name,
       description: req.body.description,
@@ -270,6 +303,8 @@ exports.item_update_post = [
         l: req.body.large,
         xl: req.body.extraLarge,
       },
+      // First checks for new file, then nofile value, and then old image.
+      image_file: (req.file !== undefined ? req.file.buffer : (req.body.nofile ? null : (oldImgBuffer !== null ? oldImgBuffer : null))),
       _id: req.params.id,
     });
 

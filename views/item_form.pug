@@ -30,6 +30,17 @@ block content
       label(for='description') Description:
       //- [BUG] The textareas value is not being properly rendered when there are errors.
       textarea(class='form-control' form='item-form' cols='60' rows='10' placeholder='Description' name='description' value=(undefined === item ? '' : item.description))
+
+    if (item && item.convertedBuffer !== null)
+      div(class='delete-image-cont')
+        br
+        div
+          img(class='display-image' src=item.convertedBuffer)
+          div(style='display: flex; gap: 6px;')
+            label(for='nofile') DELETE IMAGE
+            input(class='form-control' type='checkbox' name='nofile' value='nofile')
+        br
+    
     div(class='form-group')
       label(for='file-upload') Image: 
       input(class='form-control' type='file' name='file-upload' value='')
