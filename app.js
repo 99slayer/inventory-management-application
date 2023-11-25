@@ -22,7 +22,7 @@ app.use(limiter);
 // Set up mongoose connection
 const mongoose = require("mongoose");
 mongoose.set("strictQuery", false);
-const mongoDB = process.env.DB_STRING;
+const mongoDB = process.env.PROD_DB_URI;
 
 main().catch((err) => console.log(err));
 async function main() {
